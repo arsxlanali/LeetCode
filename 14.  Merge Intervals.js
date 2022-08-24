@@ -1,25 +1,28 @@
 var merge = function(intervals) {
+    intervals.sort((a, b)=>a[0]-b[0]);
+  	//let length = intervals.length-1;
+  	//console.log(intervals);
     for(let i = 0;i<intervals.length-1; i++)
-    {
-        let map = new Map();
-        map.set('a',intervals[i][0]);
-        map.set('b',intervals[i][1]);
-        map.set('c',intervals[i+1][0]);
-        map.set('d',intervals[i+1][1]);
-        let mapAsc = new Map([...map.entries()].sort((a, b) => a[1] - b[1]));
-      	let keys = Array.from(mapAsc.entries());
-      	console.log(keys);
-      	//console.log(mapAsc.get('b')!=true);
-      	if(keys[0][0]=='a' && keys[1][0]!='b' || keys[0][0]=='b' && keys[1][0]!='d')
+    {	
+      	//console.log(intervals[i]);
+		
+      	if(intervals[i+1][0]>=intervals[i][0] && intervals[i+1][0]<=intervals[i][1])
         {
-          intervals[i][0] = keys[0][1];
-          intervals[i][1] = keys[3][1];
-          intervals.splice(i+1, 1);
-          //console.log(intervals);
+         	let small = intervals[i][0];
+          	let large = intervals[i][1];
+          	if(intervals[i+1][0]<small)
+            {
+              small = intervals[i+1][0];
+            }
+          	if(intervals[i+1][1]>large)
+            {
+              large = intervals[i+1][1];
+            }
+          	intervals[i][0] = small;
+          	intervals[i][1] = large;
+          	intervals.splice(i+1,1);
+          	i--;
         }
     }
     return intervals;
-};
-
-var array = [[1,4],[4,5]];
-console.log(merge(array));
+}
